@@ -18,7 +18,6 @@ public class EditTenantFormValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "companyName", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subdomain", "field.required");
 
 		EditTenantForm editTenantForm = (EditTenantForm) obj;
 

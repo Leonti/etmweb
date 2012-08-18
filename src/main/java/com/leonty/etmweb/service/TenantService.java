@@ -26,7 +26,7 @@ public class TenantService {
 	public Tenant getBySubdomain(String subdomain) {
     	
     	return (Tenant) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Tenant t WHERE t.subdomain = ?")
+    			.createQuery("FROM Tenant t WHERE t.subdomain = ? AND t.deleted != 1")
     			.setString(0, subdomain)
     			.setMaxResults(1)
     			.uniqueResult();
@@ -34,9 +34,9 @@ public class TenantService {
 
     @Transactional
 	public Tenant getByEmail(String email) {
-		
+
     	return (Tenant) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Tenant t WHERE t.email = ?")
+    			.createQuery("FROM Tenant t WHERE t.email = ? AND t.deleted != 1")
     			.setString(0, email)
     			.setMaxResults(1)
     			.uniqueResult();
@@ -46,7 +46,7 @@ public class TenantService {
 	public Tenant getByForgotKey(String forgotKey) {
 		
     	return (Tenant) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Tenant t WHERE t.forgotKey = ?")
+    			.createQuery("FROM Tenant t WHERE t.forgotKey = ? AND t.deleted != 1")
     			.setString(0, forgotKey)
     			.setMaxResults(1)
     			.uniqueResult();
@@ -56,7 +56,7 @@ public class TenantService {
 	public Tenant getByConfirmationKey(String confirmationKey) {
 		
     	return (Tenant) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Tenant t WHERE t.confirmationKey = ?")
+    			.createQuery("FROM Tenant t WHERE t.confirmationKey = ? AND t.deleted != 1")
     			.setString(0, confirmationKey)
     			.setMaxResults(1)
     			.uniqueResult();

@@ -25,13 +25,23 @@ public class Tenant {
 	private String password;
 
 	@Column(name="forgotKey")
-	private String forgotKey;
+	private String forgotKey = null;
 	
 	@Column(name="confirmationKey")
-	private String confirmationKey;
+	private String confirmationKey = null;
 	
 	private Boolean deleted = false;
 	
+	private Integer role = 2;
+	
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
+	}
+
 	public String getForgotKey() {
 		return forgotKey;
 	}

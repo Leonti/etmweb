@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.leonty.etmweb.domain.AuthenticatedUser;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.EditTenantForm;
 import com.leonty.etmweb.form.ForgotForm;
@@ -54,10 +56,13 @@ public class Account {
 	TenantFormValidator tenantFormValidator;
 	
 	@Autowired
-	private HttpServletRequest request;
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private ApplicationContext context; 
 	
 	@Autowired
-	private ApplicationContext context;
+	private HttpServletRequest request;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {	 
@@ -66,10 +71,7 @@ public class Account {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public String register(Model model) {
-		
-		System.out.println(context.getMessage("expiredReset", null, Locale.getDefault()));
-		System.out.println(request.getRequestURL().toString().replace(request.getServletPath(), ""));
-		
+				
 		model.addAttribute("tenantForm", new TenantForm());						
 		return "account/register";
 	}	
@@ -89,15 +91,15 @@ public class Account {
         
         SecureRandom random = new SecureRandom();
         String confirmationKey = new BigInteger(130, random).toString(32);
-        
         tenant.setConfirmationKey(confirmationKey);       
-    	tenantService.save(tenant);
-    	
+
+        tenant.setPassword(passwordEncoder.encodePassword(tenant.getPassword(), null));
+        
+        tenantService.save(tenant);   	
     	
 		try {
 			
 	        Map<String, Object> replacements = new HashMap<String, Object>();
-	        replacements.put("baseUrl", configService.getProperty("site.baseurl"));
 			replacements.put("confirmationkey", confirmationKey);
 			
 			emailService.sendSimpleMail(tenantForm.getEmail(), "confirmation", replacements);
@@ -106,8 +108,13 @@ public class Account {
 			e.printStackTrace();
 		}
 		
-    	return "account/confirmationsent";
+    	return "redirect:registered";
 	}
+    
+    @RequestMapping(value = "/registered", method = RequestMethod.GET)
+    public String confirmationsent() {
+    	return "account/confirmationsent";
+    }
     
     @RequestMapping(value = "/confirm", method = RequestMethod.GET)
     public String confirmation(@RequestParam(value="key", required=true) String confirmationKey,
@@ -116,20 +123,25 @@ public class Account {
     	Tenant tenant = tenantService.getByConfirmationKey(confirmationKey);
 
     	if (tenant == null) {    		
-    		model.addAttribute("error", "Invalid confirmation key");
+    		model.addAttribute("error", context.getMessage("confirmation.invalidKey", null, Locale.getDefault()));
     		return "errormessage";
     	}
     	
-		tenant.setConfirmationKey("");
+		tenant.setConfirmationKey(null);
 		tenantService.save(tenant);
-    	return "account/confirmed";
+    	return "redirect:confirmed";
     }
+    
+    @RequestMapping(value = "/confirmed", method = RequestMethod.GET)
+    public String confirmed() {
+    	return "account/confirmed";
+    }    
     
     @Secured("ROLE_USER")
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String getEdit(Model model) {
     	
-    	Tenant tenant = (Tenant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
     	EditTenantForm editTenantForm = new EditTenantForm();
     	editTenantForm.setCompanyName(tenant.getCompanyName());
     	editTenantForm.setSubdomain(tenant.getSubdomain());
@@ -209,7 +221,6 @@ public class Account {
 		try {
 			
 	        Map<String, Object> replacements = new HashMap<String, Object>();
-	        replacements.put("baseUrl", configService.getProperty("site.baseurl"));
 			replacements.put("forgotkey", forgotKey);
 			
 			emailService.sendSimpleMail(forgotForm.getEmail(), "forgot", replacements);
@@ -218,8 +229,13 @@ public class Account {
 			e.printStackTrace();
 		}
 		
-		return "account/forgotsent";
+		return "redirect:resetsent";
     	
+    }
+    
+    @RequestMapping(value = "/resetsent", method = RequestMethod.GET)
+    public String resetSent() {
+    	return "account/forgotsent";
     }
     
     @RequestMapping(value = "/reset", method = RequestMethod.GET)
@@ -249,27 +265,32 @@ public class Account {
     	
     	Tenant tenant = tenantService.getByForgotKey(forgotKey);
     	if (tenant == null) {
-    		model.addAttribute("error", "Invalid reset key");
+    		model.addAttribute("error", context.getMessage("reset.invalidKey", null, Locale.getDefault()));
     		return "errormessage";
     	}    	
 
     	tenant.setPassword(resetForm.getPassword());
-    	tenant.setForgotKey("");
+    	tenant.setForgotKey(null);
     	
     	tenantService.save(tenant);
     	
+    	return "redirect:reseted";
+    }
+    
+    @RequestMapping(value = "/reseted", method = RequestMethod.GET)
+    public String reseted() {
     	return "account/reseted";
-    } 
+    }    
     
     @Secured("ROLE_USER")
     @RequestMapping(value = "/overview", method = RequestMethod.GET)
     public String overview(Model model) {
     	
-    	Tenant tenant = (Tenant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     	
     	
-    	model.addAttribute("etmsite", configService.getProperty("site.etmsite"));
-    	model.addAttribute("tenant", tenant);
+    	model.addAttribute("rootSite", request.getRequestURL().toString().replace(request.getServletPath(), ""));
+    	model.addAttribute("tenant", authUser.getTenant());
     	return "account/overview";
     }
     

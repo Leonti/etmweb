@@ -1,13 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>  
+<%@taglib prefix="bootstrap" tagdir="/WEB-INF/tags/bootstrap" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
-</head>
-<body>
-Confirmation link has been sent to your email.
-</body>
-</html>
+    
+<spring:message code="confirmationSentTitle" var="title"/>
+<jsp:include page="../common/header.jsp" flush="true" >
+	<jsp:param name="title" value="${title}" /> 
+</jsp:include>
+
+    <div class="container">
+
+	    <div class="row">
+	    	<div class="offset3 span6 alert alert-info">
+	  		   <spring:message code="confirmationSent" />	    	
+	    	</div>
+	    </div>
+    </div> <!-- /container -->
+  
+<jsp:include page="../common/footer.jsp" flush="true" />
