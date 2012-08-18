@@ -1,0 +1,7 @@
+<html>
+<body>
+<h1>Here is your confirmation link:</h1>
+<a href="${baseUrl}account/confirm?key=${confirmationkey}">Confirm!</a>
+
+</body>
+</html>

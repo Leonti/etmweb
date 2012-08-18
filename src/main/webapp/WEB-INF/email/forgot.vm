@@ -1,0 +1,7 @@
+<html>
+<body>
+<h1>Here is your password reset link:</h1>
+<a href="${baseUrl}account/reset?key=${forgotkey}">Reset password!</a>
+
+</body>
+</html>
