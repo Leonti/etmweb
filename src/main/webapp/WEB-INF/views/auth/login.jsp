@@ -1,31 +1,49 @@
-<?xml version="1.0" encoding="UTF-8" ?>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Insert title here</title>
-</head>
-<body>
-	<h1>Login</h1>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="bootstrap" tagdir="/WEB-INF/tags/bootstrap" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"  %>
+    
+<spring:message code="login.pageTitle" var="title"/>    
+<jsp:include page="../common/header.jsp" flush="true" >
+	<jsp:param name="title" value="${title}" /> 
+</jsp:include>
 
-	<div id="login-error">${error}</div>
-	
-	<form action="../j_spring_security_check" method="post" >
-	
-	<p>
-		<label for="j_username">Username</label>
-		<input id="j_username" name="j_username" type="text" />
-	</p>
-	
-	<p>
-		<label for="j_password">Password</label>
-		<input id="j_password" name="j_password" type="password" />
-	</p>
-	
-	<input  type="submit" value="Login"/>								
-		
-	</form>
-</body>
-</html>
+    <div class="container">
+
+	<c:if test="${not empty param.error}">
+	    <div class="row">
+	    	<div class="offset3 span6 alert alert-error">
+	  		   <spring:message code="login.error" />	    	
+	    	</div>
+	    </div>
+	</c:if>	    
+	    <div class="row">
+
+		    <div class="span4 offset4">
+				<form method="POST" class="well" action="../j_spring_security_check">
+
+				    <div class="control-group">
+				        <label class="control-label" for="j_username">${label}</label>
+				        <div class="controls">
+				            <input id="j_username" name="j_username" />
+				        </div>
+				    </div>
+				    <div class="control-group">
+				        <label class="control-label" for="j_password">${label}</label>
+				        <div class="controls">
+				            <input id="j_password" name="j_password" type="password" />
+				        </div>
+				    </div>				
+					
+					<div class="form-actions">
+						<spring:message code="login.submit" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
+					</div>	
+				</form>	        
+		    </div>
+	    </div>
+
+    </div> <!-- /container -->
+    
+<jsp:include page="../common/footer.jsp" flush="true" />

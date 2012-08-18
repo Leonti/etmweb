@@ -1,21 +1,38 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="bootstrap" tagdir="/WEB-INF/tags/bootstrap" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Provide your email to sent your password reset link</title>
-</head>
-<body>
-<form:form modelAttribute="forgotForm" method="POST">
-	<form:label path="email">Email:</form:label>
-	<form:errors path="email" cssClass="error"/><br />
-	<form:input path="email"/><br />
-	
-	<input type="submit" value="Send reset link" />	
-</form:form>
+    
+<spring:message code="reset.pageTitle" var="title"/>    
+<jsp:include page="../common/header.jsp" flush="true" >
+	<jsp:param name="title" value="${title}" /> 
+</jsp:include>
 
-</body>
-</html>
+    <div class="container">
+
+	    <div class="row">
+	    	<div class="offset3 span6 alert alert-into">
+	  		   <spring:message code="reset.info" /> 	    	
+	    	</div>
+	    </div>
+	    
+	    <div class="row">
+
+		    <div class="span4 offset4">
+				<form:form modelAttribute="forgotForm" method="POST" class="well">
+				
+					<bootstrap:input path="email" labelMessage="reset.email" />
+					
+					<div class="form-actions">
+						<spring:message code="reset.submit" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
+					</div>	
+				</form:form>	        
+		    </div>
+	    </div>
+
+    </div> <!-- /container -->
+    
+<jsp:include page="../common/footer.jsp" flush="true" />

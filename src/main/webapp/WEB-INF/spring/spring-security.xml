@@ -28,7 +28,6 @@
 				logout-url="/auth/logout"/>
 	
 	</security:http>
-
  
 <!-- Declare an authentication-manager to use a custom userDetailsService -->
  <security:authentication-manager>

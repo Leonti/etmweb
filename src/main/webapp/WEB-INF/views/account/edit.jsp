@@ -1,38 +1,50 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="bootstrap" tagdir="/WEB-INF/tags/bootstrap" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Edit company info</title>
-</head>
-<body>
-<form:form modelAttribute="editTenantForm" method="POST">
-	<form:label path="companyName">Company name:</form:label>
-	<form:errors path="companyName" cssClass="error"/><br />
-	<form:input path="companyName"/><br />
-
-	<form:label path="subdomain">Subdomain:</form:label>
-	<form:errors path="subdomain" cssClass="error"/><br />
-	<form:input path="subdomain"/><br />	
-	
-	<input type="submit" value="Save" />	
-</form:form>
-
-<form:form modelAttribute="changePasswordForm" action="savepassword" method="POST">
-
-    <form:label path="password">Password:</form:label>
-    <form:errors path="password" cssClass="error"/><br />
-    <form:password path="password"/><br />
     
-    <form:label path="repeatPassword">Repeat password:</form:label>
-    <form:errors path="repeatPassword" cssClass="error"/><br />
-    <form:password path="repeatPassword"/><br />    
-    
-    <input type="submit" value="Change password" />         
-</form:form>
+<spring:message code="edit.pageTitle" var="title"/>    
+<jsp:include page="../common/header.jsp" flush="true" >
+	<jsp:param name="title" value="${title}" /> 
+</jsp:include>
 
-</body>
-</html>
+    <div class="container">
+
+	    <div class="row">
+		    <div class="span4 offset4">
+				<form:form modelAttribute="editTenantForm" method="POST" class="well">
+				
+					<bootstrap:input path="companyName" labelMessage="register.companyName" />
+					<bootstrap:input path="subdomain" labelMessage="register.subdomain" />
+					
+					<div class="form-actions">
+						<spring:message code="edit.submit" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
+					</div>		
+				</form:form>	        
+		    </div>
+	    </div>
+
+	    <div class="row">
+
+		    <div class="span4 offset4">
+				<form:form modelAttribute="changePasswordForm" method="POST" class="well">
+				
+					<bootstrap:input path="password" labelMessage="register.password" type="password" />
+					<bootstrap:input path="repeatPassword" labelMessage="register.repeatPassword" type="password" />
+					
+					<div class="form-actions">
+						<spring:message code="edit.changePassword" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
+					</div>		
+				</form:form>	        
+		    </div>
+	    </div>
+
+    </div> <!-- /container -->
+    
+    
+
+<jsp:include page="../common/footer.jsp" flush="true" />

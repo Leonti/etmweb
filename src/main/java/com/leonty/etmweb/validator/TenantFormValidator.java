@@ -24,16 +24,11 @@ public class TenantFormValidator implements Validator {
 	@Override
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "companyName", "field.required");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "subdomain", "field.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "field.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "field.required");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "repeatPassword", "field.required");
 
 		TenantForm tenantForm = (TenantForm) obj;
-		
-		if (tenantService.getBySubdomain(tenantForm.getSubdomain()) != null) {
-			errors.rejectValue("subdomain", "subdomainregistered");
-		}
 		
 		if (tenantService.getByEmail(tenantForm.getEmail()) != null) {
 			errors.rejectValue("email", "userregistered");
