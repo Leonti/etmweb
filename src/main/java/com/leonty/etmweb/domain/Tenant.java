@@ -15,9 +15,6 @@ public class Tenant {
 	private Integer id;
 	
 	private String companyName;
-
-	@Column(name="subdomain")
-	private String subdomain;
 	
 	@Column(name="email")
 	private String email;
@@ -68,11 +65,10 @@ public class Tenant {
 
 	public Tenant() {}	
 	
-	public Tenant(String companyName, String subdomain, String email,
+	public Tenant(String companyName, String email,
 			String password) {
 		
 		this.companyName = companyName;
-		this.subdomain = subdomain;
 		this.email = email;
 		this.password = password;
 	}
@@ -83,14 +79,6 @@ public class Tenant {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}
-
-	public String getSubdomain() {
-		return subdomain;
-	}
-
-	public void setSubdomain(String subdomain) {
-		this.subdomain = subdomain;
 	}
 
 	public String getEmail() {

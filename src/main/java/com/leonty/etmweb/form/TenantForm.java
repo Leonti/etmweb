@@ -6,8 +6,6 @@ public class TenantForm {
 
 	private String companyName;
 	
-	private String subdomain;
-	
 	private String email;
 	
 	private String password;
@@ -20,14 +18,6 @@ public class TenantForm {
 
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
-	}
-
-	public String getSubdomain() {
-		return subdomain;
-	}
-
-	public void setSubdomain(String subdomain) {
-		this.subdomain = subdomain;
 	}
 
 	public String getEmail() {
@@ -55,7 +45,7 @@ public class TenantForm {
 	}
 	
 	public Tenant getTenant() {
-		return new Tenant(companyName, subdomain, email,
+		return new Tenant(companyName, email,
 				password);
 	}
 }
