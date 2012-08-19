@@ -3,7 +3,6 @@ package com.leonty.etmweb.controller;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.leonty.etmweb.domain.AuthenticatedUser;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.EmployeeForm;
+import com.leonty.etmweb.form.EmployeeJobForm;
 import com.leonty.etmweb.service.EmployeeService;
+import com.leonty.etmweb.service.JobService;
 import com.leonty.etmweb.validator.EmployeeFormValidator;
 
 @Controller
@@ -28,11 +29,11 @@ public class Employee {
 	@Resource(name="employeeService")
 	EmployeeService employeeService;	
 
+	@Resource(name="jobService")
+	JobService jobService;		
+	
 	@Autowired
-	EmployeeFormValidator employeeFormValidator;	
-
-	@Autowired
-	private ApplicationContext context; 	
+	EmployeeFormValidator employeeFormValidator;		
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model) {
@@ -40,6 +41,8 @@ public class Employee {
 		Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
 		
 		model.addAttribute("list", employeeService.getList(tenant.getId()));
+		model.addAttribute("jobList", jobService.getList(tenant.getId()));
+		model.addAttribute("employeeJobForm", new EmployeeJobForm());
 		
 		return "employee/list";
 	}
@@ -102,6 +105,22 @@ public class Employee {
         
         employeeService.save(employee);   	
 		
+    	return "redirect:list";
+	} 
+    
+    @RequestMapping(value = "/addjob", method = RequestMethod.POST)
+    public String editPost(@RequestParam(value="id", required=true) Integer employeeId,
+    					@ModelAttribute("employeeJobForm") EmployeeJobForm employeeJobForm, 
+    					Model model) {
+    	
+       
+        Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
+        com.leonty.etmweb.domain.Employee employee = employeeService.getById(employeeId, tenant.getId());
+
+        com.leonty.etmweb.domain.Job job = jobService.getById(employeeJobForm.getJobId(), tenant.getId());
+        
+        employeeService.addJob(employee, job);   	       
+        
     	return "redirect:list";
 	}    
     

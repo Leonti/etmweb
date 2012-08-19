@@ -5,7 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     
-<spring:message code="edit.pageTitle" var="title"/>    
+<spring:message code="employee.listPageTitle" var="title"/>    
 <jsp:include page="../common/header.jsp" flush="true" >
 	<jsp:param name="title" value="${title}" /> 
 </jsp:include>
@@ -18,9 +18,9 @@
 		    	<table class="table table-striped">
 		    		<thead>
 		    			<tr>
-		    				<th>Name</th>
-		    				<th>Code</th>
-		    				<th>Jobs</th>
+		    				<th><spring:message code="employee.name" /></th>
+		    				<th><spring:message code="employee.code" /></th>
+		    				<th><spring:message code="employee.jobs" /></th>
 		    				<th></th>
 		    			</tr>
 		    		</thead>
@@ -29,7 +29,32 @@
 		    			<tr>
 		    				<td>${employee.name}</td>
 		    				<td>${employee.code}</td>
-		    				<td></td>
+		    				<td>
+		    					<table class="table table-condensed">
+		    						<thead>
+		    							<tr>
+		    								<th><spring:message code="job.title" /></th>
+		    								<th><spring:message code="job.wage" /></th>
+		    							</tr>
+		    						</thead>
+		    						<tbody>
+			    					<c:forEach var="job" items="${employee.jobs}">
+			    						<tr>
+			    							<td>${job.title}</td>
+			    							<td>${job.wage}</td>
+			    						</tr>	    						  
+			    					</c:forEach>
+			    					</tbody>
+		    					</table>
+		    				
+								<form:form modelAttribute="employeeJobForm" action="/employee/addjob?id=${employee.id}" method="POST" class="form-search">
+								
+									<form:select path="jobId" items="${jobList}" itemValue="id" itemLabel="title" />
+																	
+									<spring:message code="employee.addJob" var="submit" /> 
+									<input type="submit" value="${submit}" class="btn" />		
+								</form:form>		    				
+		    				</td>
 		    				<td><a href="/employee/edit?id=${employee.id}"><spring:message code="employee.editLink" /></a></td>
 		    			</tr>	
 		    		</c:forEach>

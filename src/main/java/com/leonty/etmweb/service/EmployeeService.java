@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.leonty.etmweb.domain.Employee;
+import com.leonty.etmweb.domain.Job;
 
 @Service("employeeService")
 public class EmployeeService {
@@ -50,5 +51,13 @@ public class EmployeeService {
     			.setLong(1, tenantId)
     			.setMaxResults(1)
     			.uniqueResult();
-	}    
+	} 
+    
+    @Transactional
+    public void addJob(Employee employee, Job job) {
+    	
+    	employee.getJobs().add(job);
+    	
+    	save(employee);
+    }
 }
