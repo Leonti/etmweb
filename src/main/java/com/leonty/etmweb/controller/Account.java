@@ -54,6 +54,12 @@ public class Account {
 	
 	@Autowired
 	TenantFormValidator tenantFormValidator;
+
+	@Autowired
+	ForgotFormValidator forgotFormValidator;
+	
+	@Autowired
+	EditTenantFormValidator editValidator;  
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -159,9 +165,7 @@ public class Account {
 
     	Tenant tenant = (Tenant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   		
-		editTenantForm.setEmail(tenant.getEmail());
-		
-    	EditTenantFormValidator editValidator = new EditTenantFormValidator();   	
+		editTenantForm.setEmail(tenant.getEmail()); 	
     	editValidator.validate(editTenantForm, result);
     	
     	if (result.hasErrors()) {
@@ -204,8 +208,8 @@ public class Account {
     public String forgotPost(@ModelAttribute("forgotForm") ForgotForm forgotForm,
     							Model model,
     							BindingResult result) {
-    	ForgotFormValidator validator = new ForgotFormValidator();
-    	validator.validate(forgotForm, result);
+
+    	forgotFormValidator.validate(forgotForm, result);
     	if (result.hasErrors()) {
     		return "account/forgot";
     	}
@@ -269,7 +273,7 @@ public class Account {
     		return "errormessage";
     	}    	
 
-    	tenant.setPassword(resetForm.getPassword());
+    	tenant.setPassword(passwordEncoder.encodePassword(resetForm.getPassword(), null));
     	tenant.setForgotKey(null);
     	
     	tenantService.save(tenant);
