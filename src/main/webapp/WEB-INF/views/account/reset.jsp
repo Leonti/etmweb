@@ -1,26 +1,33 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="bootstrap" tagdir="/WEB-INF/tags/bootstrap" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"  %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>New password</title>
-</head>
-<body>
-<form:form modelAttribute="resetForm" method="POST">
+    
+<spring:message code="reset.pageTitle" var="title"/>    
+<jsp:include page="../common/header.jsp" flush="true" >
+	<jsp:param name="title" value="${title}" /> 
+</jsp:include>
 
-	<form:label path="password">New password:</form:label>
-	<form:errors path="password" cssClass="error"/><br />
-	<form:password path="password"/><br />
+    <div class="container">
+	    
+	    <div class="row">
 
-	<form:label path="repeatPassword">Repeat password:</form:label>
-	<form:errors path="repeatPassword" cssClass="error"/><br />
-	<form:password path="repeatPassword"/><br />
-	
-	<input type="submit" value="Save new password" />	
-</form:form>
+		    <div class="span4 offset4">
+				<form:form modelAttribute="resetForm" method="POST" class="well">
+				
+					<bootstrap:input path="password" labelMessage="register.password" type="password" />
+					<bootstrap:input path="repeatPassword" labelMessage="register.repeatPassword" type="password" />
+					
+					<div class="form-actions">
+						<spring:message code="reset.saveNewPassword" var="submit" /> 
+						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
+					</div>	
+				</form:form>	        
+		    </div>
+	    </div>
 
-</body>
-</html>
+    </div> <!-- /container -->
+    
+<jsp:include page="../common/footer.jsp" flush="true" />
