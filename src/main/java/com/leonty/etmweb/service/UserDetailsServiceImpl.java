@@ -40,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		boolean accountNonLocked = true;
 		
 		return new AuthenticatedUser (
-				tenant.getCompanyName(),
+				tenant.getEmail(),
 				tenant.getPassword(),
 				enabled,
 				accountNonExpired,

@@ -43,7 +43,8 @@
             <ul class="nav">
               <sec:authorize access="hasRole('ROLE_USER')">
 	            <li><a href="/employee/list"><spring:message code="navigation.employees" /></a></li>
-	            <li><a href="/job/list"><spring:message code="navigation.jobs" /></a></li>	              
+	            <li><a href="/job/list"><spring:message code="navigation.jobs" /></a></li>
+	            <li><a href="/auth/service"><spring:message code="navigation.serviceMode" /></a></li>	              
 			  </sec:authorize>
   			  <sec:authorize access="isAnonymous()">
   			      <li><a href="/about">About</a></li>
