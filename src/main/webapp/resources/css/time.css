@@ -1,0 +1,46 @@
+.keyboard .button {
+	background: green;
+	height: 140px;
+	margin-bottom: 20px;
+	border-radius: 10px;
+	background-color: rgb(238, 238, 238);
+	font-size: 100px;
+	line-height: 140px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.keyboard .button:hover {
+	background-color: rgb(204, 204, 204);
+}
+
+.keyboard .button input[type="submit"] {
+	width: 100%;
+	height: 100%;
+	border: none;
+	margin: 0;
+	background-color: rgb(238, 238, 238);
+	font-size: 70px;
+	line-height: 140px;
+	vertical-align: top;
+	border-radius: 10px;
+}
+
+.keyboard .button input[type="submit"]:hover {
+	background-color: rgb(204, 204, 204);
+}
+
+.keyboard .codeInput {
+	height: 80px;
+	margin-bottom: 40px;
+}
+
+.keyboard .codeInput input {
+	height: 100%;
+	font-size: 50px;
+	line-height: 50px;
+}
+
+.keyboard .codeInput .help-inline {
+	font-size: 16px;
+}

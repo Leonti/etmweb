@@ -15,6 +15,8 @@
     <!-- Le styles -->
 
     <link href="../resources/css/bootstrap.css" rel="stylesheet">
+    <link href="../resources/css/time.css" rel="stylesheet">
+    <link href="../resources/css/general_foundicons.css" rel="stylesheet">   
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
