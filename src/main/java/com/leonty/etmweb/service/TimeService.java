@@ -13,25 +13,25 @@ import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Time;
 
-@Service("timeEntryService")
+@Transactional
+@Service("timeService")
 public class TimeService {
 
     @Autowired
     private SessionFactory sessionFactory;
 	
-    @Transactional
-	public void save(Time timeEntry) {
-		sessionFactory.getCurrentSession().saveOrUpdate(timeEntry);
+	public void save(Time time) {
+		sessionFactory.getCurrentSession().saveOrUpdate(time);
 	}
     
 	@SuppressWarnings("unchecked")	
-	public void signInEmployee(Employee employee, Job job, Date in, Integer tenantId) {
+	public void signInEmployee(Employee employee, Job job, Date inTime, Integer tenantId) {
 
 		ArrayList<Time> times = new ArrayList<Time>(sessionFactory.getCurrentSession().createQuery(
 		"FROM Time AS time WHERE " +
-		"time.employee = ? AND time.out = NULL " +
+		"time.employee = ? AND time.outTime = NULL " +
 		"AND tenantId = ?" +
-		"ORDER BY time.in DESC")
+		"ORDER BY time.inTime DESC")
 		.setParameter(0, employee)
 		.setParameter(1, tenantId)
 		.setMaxResults(1)
@@ -40,28 +40,28 @@ public class TimeService {
 		// Employee is currently "punched in" in some job -punch him out
 		if (times.size() > 0) {
 			Time timeAlreadyIn = times.get(0);
-			timeAlreadyIn.setOut(in);
+			timeAlreadyIn.setOutTime(inTime);
 		}		
 		
-		Time time = new Time(employee, job, in, tenantId);
+		Time time = new Time(employee, job, inTime, tenantId);
 		save(time);	
 	}
 	
-	public void signOutEmployee(Employee employee, Date out, Integer tenantId) {
+	public void signOutEmployee(Employee employee, Date outTime, Integer tenantId) {
 		
 		// only proceed if employee is currently working
-		if (getJobAtTime(employee, out, tenantId) != null) {
+		if (getJobAtTime(employee, outTime, tenantId) != null) {
 			
 			// get current working time entry
 			Time time = (Time) sessionFactory.getCurrentSession().createQuery(
-				"FROM Time AS time WHERE time.employee = ? AND time.tenantId = ? ORDER BY time.in DESC")
+				"FROM Time AS time WHERE time.employee = ? AND time.tenantId = ? ORDER BY time.inTime DESC")
 				.setParameter(0, employee)
 				.setParameter(1, tenantId)
 				.setMaxResults(1)
 				.uniqueResult();
 				
 				// update it's time out to given time
-				time.setOut(out);
+				time.setOutTime(outTime);
 				save(time);		
 		}
 	}
@@ -73,11 +73,11 @@ public class TimeService {
 		// or those that started before but still going on
  		return new ArrayList<Time>(sessionFactory.getCurrentSession().createQuery(
 				"FROM Time AS time WHERE time.employee = ? " +
-				"AND (time.in >= ? " +
-				"OR ((time.out = NULL OR time.out > ?) AND time.in < ?)) " +
-				"AND time.in <= ? " +
+				"AND (time.inTime >= ? " +
+				"OR ((time.outTime = NULL OR time.outTime > ?) AND time.inTime < ?)) " +
+				"AND time.inTime <= ? " +
 				"AND time.tenantId = ?" +
-				"ORDER BY time.in ASC")
+				"ORDER BY time.inTime ASC")
 				.setParameter(0, employee)
 				.setParameter(1, start)
 				.setParameter(2, start)
@@ -88,15 +88,14 @@ public class TimeService {
 	}	
 	
 	public Job getJobAtTime(Employee employee, Date pointInTime, Integer tenantId) {
-
+		
  		Time time = (Time) sessionFactory.getCurrentSession().createQuery(
-			"FROM Time AS time WHERE time.employee = ? " +
-			"AND ((time.out = NULL OR time.out > ?) AND time.in <= ?)) " +
-			"AND time.tenantId = ?")
-			.setParameter(0, employee)
-			.setParameter(1, pointInTime)
-			.setParameter(2, pointInTime)
-			.setParameter(3, tenantId)
+			"FROM Time AS time WHERE time.employee = :employee " +
+			"AND (time.outTime = NULL OR time.outTime > :pointInTime) AND time.inTime >= :pointInTime " +
+			"AND time.tenantId = :tenantId")
+			.setParameter("employee", employee)
+			.setDate("pointInTime", pointInTime)
+			.setInteger("tenantId", tenantId)
 			.setMaxResults(1)
 			.uniqueResult();
  		

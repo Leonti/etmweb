@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="TimeEntry")
+@Table(name="Time")
 public class Time {
 
     @Id
@@ -24,9 +24,9 @@ public class Time {
     @ManyToOne
     private Employee employee;     
     
-    private Date in;
+    private Date inTime;
     
-    private Date out;   
+    private Date outTime;   
     
 	@Column(name="tenantId")
 	private Integer tenantId;
@@ -34,15 +34,13 @@ public class Time {
 	
 	public Time() {}
 	
-	public Time(Employee employee, Job job, Date in, Integer tenantId) {
+	public Time(Employee employee, Job job, Date inTime, Integer tenantId) {
 		this.employee = employee;
 		this.job = job;
-		this.in = in;		
+		this.inTime = inTime;		
 		this.tenantId = tenantId;
 	}
 	
-
-
 	public Employee getEmployee() {
 		return employee;
 	}
@@ -59,20 +57,20 @@ public class Time {
 		this.job = job;
 	}
 
-	public Date getIn() {
-		return in;
+	public Date getInTime() {
+		return inTime;
 	}
 
-	public void setIn(Date in) {
-		this.in = in;
+	public void setInTime(Date inTime) {
+		this.inTime = inTime;
 	}
 
-	public Date getOut() {
-		return out;
+	public Date getOutTime() {
+		return outTime;
 	}
 
-	public void setOut(Date out) {
-		this.out = out;
+	public void setOutTime(Date outTime) {
+		this.outTime = outTime;
 	}
 
 	public Integer getTenantId() {

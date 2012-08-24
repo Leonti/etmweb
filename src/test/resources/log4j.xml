@@ -9,6 +9,10 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
+
+<category name="org.hibernate.type">
+  <priority value="TRACE"/>
+</category>
 	
 	<!-- Application Loggers -->
 	<logger name="com.leonty.etmweb">
