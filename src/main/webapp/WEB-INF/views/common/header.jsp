@@ -14,7 +14,8 @@
 
     <!-- Le styles -->
 
-    <link href="../resources/css/bootstrap.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <link href="../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -44,6 +45,7 @@
               <sec:authorize access="hasRole('ROLE_USER')">
 	            <li><a href="/employee/list"><spring:message code="navigation.employees" /></a></li>
 	            <li><a href="/job/list"><spring:message code="navigation.jobs" /></a></li>
+	            <li><a href="/log/"><spring:message code="navigation.log" /></a></li>
 	            <li><a href="/auth/service"><spring:message code="navigation.serviceMode" /></a></li>	              
 			  </sec:authorize>
   			  <sec:authorize access="isAnonymous()">

@@ -34,7 +34,16 @@
 				        <div class="controls">
 				            <input id="j_password" name="j_password" type="password" />
 				        </div>
-				    </div>				
+				    </div>			
+
+					<div class="control-group">
+						<div class="controls">
+						<label class="checkbox">
+							<input type="checkbox" name='_spring_security_remember_me' checked="checked"> 
+							<spring:message code="login.rememberMe" />
+						</label>
+						</div>
+					</div>
 					
 					<div class="form-actions">
 						<spring:message code="login.submit" var="submit" /> 

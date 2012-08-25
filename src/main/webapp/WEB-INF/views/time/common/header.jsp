@@ -14,7 +14,7 @@
 
     <!-- Le styles -->
 
-    <link href="../resources/css/bootstrap.css" rel="stylesheet">
+    <link href="../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="../resources/css/time.css" rel="stylesheet">
     <link href="../resources/css/general_foundicons.css" rel="stylesheet">   
     <style>

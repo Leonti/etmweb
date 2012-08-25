@@ -44,7 +44,7 @@
 			    							<td>${job.title}</td>
 			    							<td>${job.wage}</td>
 			    							<td>
-												<form:form modelAttribute="employeeJobForm" action="/employee/removejob?id=${employee.id}" method="POST" class="form-search">												
+												<form:form modelAttribute="employeeJobForm" action="/employee/removejob?id=${employee.id}" method="POST" class="form-inline">												
 													<form:hidden path="jobId" value="${job.id}" />
 													<spring:message code="employee.removeJob" var="submit" /> 
 													<input type="submit" value="${submit}" class="btn" />		
@@ -55,7 +55,7 @@
 			    					</tbody>
 		    					</table>
 		    				
-								<form:form modelAttribute="employeeJobForm" action="/employee/addjob?id=${employee.id}" method="POST" class="form-search">
+								<form:form modelAttribute="employeeJobForm" action="/employee/addjob?id=${employee.id}" method="POST" class="form-inline">
 								
 									<form:select path="jobId" items="${jobList}" itemValue="id" itemLabel="title" />
 																	

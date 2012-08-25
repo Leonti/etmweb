@@ -17,7 +17,7 @@
 </c:if>
 
 <c:if test="${empty type}">
-    <c:set var="type" value="input" />
+    <c:set var="type" value="text" />
 </c:if>
 <spring:bind path="${path}">
     <div class="control-group ${status.error ? 'error' : '' }">
