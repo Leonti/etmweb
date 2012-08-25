@@ -11,30 +11,32 @@ import org.springframework.transaction.annotation.Transactional;
 import com.leonty.etmweb.domain.Job;
 
 @Service("jobService")
+@Transactional
 public class JobService {
 
     @Autowired
     private SessionFactory sessionFactory;
     
-    @Transactional
 	public void save(Job job) {
 		sessionFactory.getCurrentSession().saveOrUpdate(job);
 	}
+	
+	public void delete(Job job) {
+		sessionFactory.getCurrentSession().delete(job);
+	}
     
     @SuppressWarnings("unchecked")
-	@Transactional
 	public List<Job> getList(Integer tenantId) {
     	
     	return (ArrayList<Job>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Job j WHERE j.tenantId = ? AND j.deleted != 1")
+    			.createQuery("FROM Job j WHERE j.tenantId = ?")
     			.setLong(0, tenantId).list();
 	} 
     
-    @Transactional
 	public Job getById(Integer id, Integer tenantId) {
 
     	return (Job) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Job j WHERE j.id = ? AND j.tenantId = ? AND j.deleted != 1")
+    			.createQuery("FROM Job j WHERE j.id = ? AND j.tenantId = ?")
     			.setLong(0, id)
     			.setLong(1, tenantId)
     			.setMaxResults(1)

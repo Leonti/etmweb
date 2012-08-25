@@ -20,27 +20,27 @@
 					</div>
 				</div>
 			    <div class="row">
-				    <div class="span2 offset2 button">1</div>
-				    <div class="span2 button">2</div>
-				    <div class="span2 button">3</div>
+				    <div class="span2 offset2 button number">1</div>
+				    <div class="span2 button number">2</div>
+				    <div class="span2 button number">3</div>
 				    <div class="span2 button">
 				    	<spring:message code="time.codeSubmit" var="submit" />
 				    	<input type="submit" value="${submit}"/>
 				    </div>
 			    </div>
 			    <div class="row">
-				    <div class="span2 offset2 button">4</div>
-				    <div class="span2 button">5</div>
-				    <div class="span2 button">6</div>
-				    <div class="span2 button"> 
+				    <div class="span2 offset2 button number">4</div>
+				    <div class="span2 button number">5</div>
+				    <div class="span2 button number">6</div>
+				    <div class="span2 button delete"> 
 						<i class="general foundicon-left-arrow"></i>
 					</div>
 			    </div>
 			    <div class="row">
-				    <div class="span2 offset2 button">7</div>
-				    <div class="span2 button">8</div>
-				    <div class="span2 button">9</div>
-				    <div class="span2 button">0</div>
+				    <div class="span2 offset2 button number">7</div>
+				    <div class="span2 button number">8</div>
+				    <div class="span2 button number">9</div>
+				    <div class="span2 button number">0</div>
 			    </div>
 		    </form:form>
 	    </div>  	    

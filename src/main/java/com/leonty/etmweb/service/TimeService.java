@@ -91,7 +91,7 @@ public class TimeService {
 		
  		Time time = (Time) sessionFactory.getCurrentSession().createQuery(
 			"FROM Time AS time WHERE time.employee = :employee " +
-			"AND (time.outTime = NULL OR time.outTime > :pointInTime) AND time.inTime >= :pointInTime " +
+			"AND (time.outTime = NULL OR time.outTime < :pointInTime) AND time.inTime >= :pointInTime " +
 			"AND time.tenantId = :tenantId")
 			.setParameter("employee", employee)
 			.setDate("pointInTime", pointInTime)

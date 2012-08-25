@@ -35,6 +35,7 @@
 		    							<tr>
 		    								<th><spring:message code="job.title" /></th>
 		    								<th><spring:message code="job.wage" /></th>
+		    								<th></th>
 		    							</tr>
 		    						</thead>
 		    						<tbody>
@@ -42,6 +43,13 @@
 			    						<tr>
 			    							<td>${job.title}</td>
 			    							<td>${job.wage}</td>
+			    							<td>
+												<form:form modelAttribute="employeeJobForm" action="/employee/removejob?id=${employee.id}" method="POST" class="form-search">												
+													<form:hidden path="jobId" value="${job.id}" />
+													<spring:message code="employee.removeJob" var="submit" /> 
+													<input type="submit" value="${submit}" class="btn" />		
+												</form:form>			    							
+			    							</td>
 			    						</tr>	    						  
 			    					</c:forEach>
 			    					</tbody>

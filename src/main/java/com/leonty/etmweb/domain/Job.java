@@ -22,8 +22,6 @@ public class Job {
     
 	@Column(name="tenantId")
 	private Integer tenantId;
-	
-	private boolean deleted = false;
     
     public Job() {}
     
@@ -53,14 +51,6 @@ public class Job {
 
 	public void setTenantId(Integer tenantId) {
 		this.tenantId = tenantId;
-	}
-
-	public boolean isDeleted() {
-		return deleted;
-	}
-
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
 	}
 	
 	@Override

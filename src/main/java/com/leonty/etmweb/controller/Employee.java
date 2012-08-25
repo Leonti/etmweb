@@ -123,5 +123,21 @@ public class Employee {
         
     	return "redirect:list";
 	}    
+ 
+    @RequestMapping(value = "/removejob", method = RequestMethod.POST)
+    public String removeJob(@RequestParam(value="id", required=true) Integer employeeId,
+    					@ModelAttribute("employeeJobForm") EmployeeJobForm employeeJobForm, 
+    					Model model) {
+    	
+       
+        Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
+        com.leonty.etmweb.domain.Employee employee = employeeService.getById(employeeId, tenant.getId());
+
+        com.leonty.etmweb.domain.Job job = jobService.getById(employeeJobForm.getJobId(), tenant.getId());
+        
+        employeeService.removeJob(employee, job);   	       
+        
+    	return "redirect:list";
+	}     
     
 }

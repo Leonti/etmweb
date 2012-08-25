@@ -30,7 +30,6 @@ public class Time {
     
 	@Column(name="tenantId")
 	private Integer tenantId;
-
 	
 	public Time() {}
 	

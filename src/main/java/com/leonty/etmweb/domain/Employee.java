@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -35,10 +36,11 @@ public class Employee {
 			@JoinColumn(name = "job_id") })	
 	private Set<Job> jobs = new HashSet<Job> ();
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Time> times;
+	
 	@Column(name="tenantId")
 	private Integer tenantId;
-	
-	private boolean deleted = false;
 	
 	public Employee() {}
 	
@@ -47,12 +49,6 @@ public class Employee {
 		this.code = code;
 	}
 	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 	public Integer getTenantId() {
 		return tenantId;
 	}
@@ -81,5 +77,13 @@ public class Employee {
 
 	public void setJobs(Set<Job> jobs) {
 		this.jobs = jobs;
+	}
+
+	public List<Time> getTimes() {
+		return times;
+	}
+
+	public void setTimes(List<Time> times) {
+		this.times = times;
 	}	
 }

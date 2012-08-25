@@ -12,52 +12,60 @@ import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 
 @Service("employeeService")
+@Transactional
 public class EmployeeService {
 
     @Autowired
     private SessionFactory sessionFactory;
 	
-    @Transactional
+
 	public void save(Employee employee) {
 		sessionFactory.getCurrentSession().saveOrUpdate(employee);
 	}	
     
+    public void delete(Employee employee) {
+    	sessionFactory.getCurrentSession().delete(employee);
+    }
+    
     @SuppressWarnings("unchecked")
-	@Transactional
 	public List<Employee> getList(Integer tenantId) {
     	
     	return (ArrayList<Employee>) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Employee e WHERE e.tenantId = ? AND e.deleted != 1")
+    			.createQuery("FROM Employee e WHERE e.tenantId = ?")
     			.setLong(0, tenantId).list();
 	}
     
-    @Transactional
 	public Employee getByCode(String code, Integer tenantId) {
 
     	return (Employee) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Employee e WHERE e.code = ? AND e.tenantId = ? AND e.deleted != 1")
+    			.createQuery("FROM Employee e WHERE e.code = ? AND e.tenantId = ?")
     			.setString(0, code)
     			.setLong(1, tenantId)
     			.setMaxResults(1)
     			.uniqueResult();
 	}
     
-    @Transactional
 	public Employee getById(Integer id, Integer tenantId) {
 
     	return (Employee) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Employee e WHERE e.id = ? AND e.tenantId = ? AND e.deleted != 1")
+    			.createQuery("FROM Employee e WHERE e.id = ? AND e.tenantId = ?")
     			.setLong(0, id)
     			.setLong(1, tenantId)
     			.setMaxResults(1)
     			.uniqueResult();
 	} 
     
-    @Transactional
     public void addJob(Employee employee, Job job) {
     	
     	employee.getJobs().add(job);
     	
     	save(employee);
     }
+    
+    public void removeJob(Employee employee, Job job) {
+    	
+    	employee.getJobs().remove(job);
+    	
+    	save(employee);
+    }    
 }
