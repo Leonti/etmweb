@@ -1,6 +1,7 @@
 package com.leonty.etmweb.domain;
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,9 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.leonty.calculation.TimeEntry;
+
 @Entity
 @Table(name="Time")
-public class Time {
+public class Time implements TimeEntry {
 
     @Id
     @GeneratedValue		
@@ -24,19 +27,28 @@ public class Time {
     @ManyToOne
     private Employee employee;     
     
-    private Date inTime;
+    private Date timeIn;
     
-    private Date outTime;   
+    public void setTimeIn(Date timeIn) {
+		this.timeIn = timeIn;
+	}
+
+    @Override
+	public void setTimeOut(Date timeOut) {
+		this.timeOut = timeOut;
+	}
+
+	private Date timeOut;   
     
 	@Column(name="tenantId")
 	private Integer tenantId;
 	
 	public Time() {}
 	
-	public Time(Employee employee, Job job, Date inTime, Integer tenantId) {
+	public Time(Employee employee, Job job, Date timeIn, Integer tenantId) {
 		this.employee = employee;
 		this.job = job;
-		this.inTime = inTime;		
+		this.timeIn = timeIn;		
 		this.tenantId = tenantId;
 	}
 	
@@ -57,19 +69,19 @@ public class Time {
 	}
 
 	public Date getInTime() {
-		return inTime;
+		return timeIn;
 	}
 
 	public void setInTime(Date inTime) {
-		this.inTime = inTime;
+		this.timeIn = inTime;
 	}
 
 	public Date getOutTime() {
-		return outTime;
+		return timeOut;
 	}
 
 	public void setOutTime(Date outTime) {
-		this.outTime = outTime;
+		this.timeOut = outTime;
 	}
 
 	public Integer getTenantId() {
@@ -82,5 +94,20 @@ public class Time {
 
 	public Integer getId() {
 		return id;
+	}
+
+	@Override
+	public Date getTimeIn() {
+		return timeIn;
+	}
+
+	@Override
+	public Date getTimeOut() {
+		return timeOut;
+	}
+
+	@Override
+	public BigDecimal getWage() {
+		return new BigDecimal(job.getWage());
 	}
 }

@@ -44,17 +44,12 @@
 	font-size: 16px;
 }
 
-input.signOutButton {
+input.signOutButton,
+input.jobButton,
+.timeBack {
 	height: 140px;
 	border-radius: 10px;	
 	font-size: 80px;
 	line-height: 140px;
 		
-}
-
-input.jobButton {
-	height: 140px;
-	border-radius: 10px;	
-	font-size: 80px;
-	line-height: 140px;	
 }

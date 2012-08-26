@@ -26,7 +26,7 @@
 				    <div class="control-group">
 				        <label class="control-label" for="j_username">${label}</label>
 				        <div class="controls">
-				            <input id="j_username" name="j_username" />
+				            <input id="j_username" name="j_username" type="text" />
 				        </div>
 				    </div>
 				    <div class="control-group">

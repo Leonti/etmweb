@@ -88,14 +88,19 @@ public class Time {
 		
 		com.leonty.etmweb.domain.Employee employee = employeeService.getByCode(jobSelectForm.getCode(), tenant.getId());
 		
+		com.leonty.etmweb.domain.Job job = null;
 		if (jobSelectForm.getJobId() != 0) {
 			
-			com.leonty.etmweb.domain.Job job = jobService.getById(jobSelectForm.getJobId(), tenant.getId());		
+			job = jobService.getById(jobSelectForm.getJobId(), tenant.getId());		
 			timeService.signInEmployee(employee, job, new Date(), tenant.getId());
 		} else {
 
-			timeService.signOutEmployee(employee, new Date(), 1);
+			timeService.signOutEmployee(employee, new Date(), tenant.getId());
 		}
+
+        model.addAttribute("employee", employee);
+        model.addAttribute("currentJob", job);
+        model.addAttribute("isWorking", job != null ? true : false);        		
 		
 		return "time/stats";
 	}

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leonty.calculation.TimeEntry;
 import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Time;
@@ -25,13 +26,13 @@ public class TimeService {
 	}
     
 	@SuppressWarnings("unchecked")	
-	public void signInEmployee(Employee employee, Job job, Date inTime, Integer tenantId) {
+	public void signInEmployee(Employee employee, Job job, Date timeIn, Integer tenantId) {
 
 		ArrayList<Time> times = new ArrayList<Time>(sessionFactory.getCurrentSession().createQuery(
 		"FROM Time AS time WHERE " +
-		"time.employee = ? AND time.outTime = NULL " +
+		"time.employee = ? AND time.timeOut = NULL " +
 		"AND tenantId = ?" +
-		"ORDER BY time.inTime DESC")
+		"ORDER BY time.timeIn DESC")
 		.setParameter(0, employee)
 		.setParameter(1, tenantId)
 		.setMaxResults(1)
@@ -40,44 +41,44 @@ public class TimeService {
 		// Employee is currently "punched in" in some job -punch him out
 		if (times.size() > 0) {
 			Time timeAlreadyIn = times.get(0);
-			timeAlreadyIn.setOutTime(inTime);
+			timeAlreadyIn.setOutTime(timeIn);
 		}		
 		
-		Time time = new Time(employee, job, inTime, tenantId);
+		Time time = new Time(employee, job, timeIn, tenantId);
 		save(time);	
 	}
 	
-	public void signOutEmployee(Employee employee, Date outTime, Integer tenantId) {
+	public void signOutEmployee(Employee employee, Date timeOut, Integer tenantId) {
 		
 		// only proceed if employee is currently working
-		if (getJobAtTime(employee, outTime, tenantId) != null) {
+		if (getJobAtTime(employee, timeOut, tenantId) != null) {
 			
 			// get current working time entry
 			Time time = (Time) sessionFactory.getCurrentSession().createQuery(
-				"FROM Time AS time WHERE time.employee = ? AND time.tenantId = ? ORDER BY time.inTime DESC")
+				"FROM Time AS time WHERE time.employee = ? AND time.tenantId = ? ORDER BY time.timeIn DESC")
 				.setParameter(0, employee)
 				.setParameter(1, tenantId)
 				.setMaxResults(1)
 				.uniqueResult();
 				
 				// update it's time out to given time
-				time.setOutTime(outTime);
+				time.setOutTime(timeOut);
 				save(time);		
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Time> getTimeForEmployee(Employee employee, Date start, Date end, Integer tenantId) {
+	public List<TimeEntry> getTimeForEmployee(Employee employee, Date start, Date end, Integer tenantId) {
 		
 		// Select time entries which started after (or at the same time as new period)
 		// or those that started before but still going on
- 		return new ArrayList<Time>(sessionFactory.getCurrentSession().createQuery(
+ 		return new ArrayList<TimeEntry>(sessionFactory.getCurrentSession().createQuery(
 				"FROM Time AS time WHERE time.employee = ? " +
-				"AND (time.inTime >= ? " +
-				"OR ((time.outTime = NULL OR time.outTime > ?) AND time.inTime < ?)) " +
-				"AND time.inTime <= ? " +
+				"AND (time.timeIn >= ? " +
+				"OR ((time.timeOut = NULL OR time.timeOut > ?) AND time.timeIn < ?)) " +
+				"AND time.timeIn <= ? " +
 				"AND time.tenantId = ?" +
-				"ORDER BY time.inTime ASC")
+				"ORDER BY time.timeIn ASC")
 				.setParameter(0, employee)
 				.setParameter(1, start)
 				.setParameter(2, start)
@@ -91,7 +92,7 @@ public class TimeService {
 		
  		Time time = (Time) sessionFactory.getCurrentSession().createQuery(
 			"FROM Time AS time WHERE time.employee = :employee " +
-			"AND (time.outTime = NULL OR time.outTime < :pointInTime) AND time.inTime >= :pointInTime " +
+			"AND (time.timeOut = NULL OR time.timeOut < :pointInTime) AND time.timeIn >= :pointInTime " +
 			"AND time.tenantId = :tenantId")
 			.setParameter("employee", employee)
 			.setDate("pointInTime", pointInTime)

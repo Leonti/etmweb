@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.leonty.calculation.TimeEntriesParser;
+import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.time.WorkWeek;
 import com.leonty.etmweb.domain.AuthenticatedUser;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.LogParametersForm;
@@ -69,7 +72,11 @@ public class Log {
 		com.leonty.etmweb.domain.Employee employee = employeeService.getById(logParametersForm.getEmployeeId(), tenant.getId());
 		model.addAttribute("employee", employee);
 		
-		List<com.leonty.etmweb.domain.Time> timeList = timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId());
+		List<TimeEntry> timeList = timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId());
+		
+		List<WorkWeek> workWeeks = TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), timeList);
+		model.addAttribute("weekList", workWeeks);
+		
 		model.addAttribute("timeList", timeList);
 		
 		System.out.println("COUNT: " + timeList.size());

@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leonty.calculation.TimeEntry;
 import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Time;
@@ -102,14 +103,14 @@ public class TimeServiceTest {
     	
     	timeService.signInEmployee(employee, job, timeIn, 1);
     	
-    	List<Time> times = timeService.getTimeForEmployee(employee, timeIn, timeOut, 1);   	
+    	List<TimeEntry> times = timeService.getTimeForEmployee(employee, timeIn, timeOut, 1);   	
     	Assert.assertTrue("After signing in number of entries for employee is not 1", times.size() == 1);
   	
     	timeService.signOutEmployee(employee, timeOut, 1);
     	
     	times = timeService.getTimeForEmployee(employee, timeIn, timeOut, 1);    	
     	Assert.assertTrue("After signing out number of entries for employee is not 1", times.size() == 1);    	   
-    	Assert.assertEquals("Date out is not the same as date used for signing out", timeOut, times.get(0).getOutTime());
+    	Assert.assertEquals("Date out is not the same as date used for signing out", timeOut, times.get(0).getTimeOut());
 
     	cal.set(2012, 8, 20, 18, 0);
     	Date timeAfterSignOut = cal.getTime();
