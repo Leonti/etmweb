@@ -9,9 +9,7 @@
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="type" required="false" type="java.lang.String"%>
 <%@attribute name="labelMessage" required="false" type="java.lang.String"%>
-<c:if test="${empty label}">
-    <c:set var="label" value="${fn:toUpperCase(fn:substring(path, 0, 1))}${fn:toLowerCase(fn:substring(path, 1,fn:length(path)))}" />
-</c:if>
+
 
 <c:if test="${not empty labelMessage}">
 	<spring:message code="${labelMessage}" var="message"/>
@@ -19,7 +17,7 @@
 </c:if>
 
 <c:if test="${empty type}">
-    <c:set var="type" value="input" />
+    <c:set var="type" value="text" />
 </c:if>
 <spring:bind path="${path}">
     <div class="control-group ${status.error ? 'error' : '' }">

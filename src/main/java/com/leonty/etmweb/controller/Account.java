@@ -150,7 +150,6 @@ public class Account {
     	Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
     	EditTenantForm editTenantForm = new EditTenantForm();
     	editTenantForm.setCompanyName(tenant.getCompanyName());
-    	editTenantForm.setSubdomain(tenant.getSubdomain());
     	
 		model.addAttribute("editTenantForm", editTenantForm);	
 		model.addAttribute("changePasswordForm", new PasswordForm());
@@ -163,37 +162,47 @@ public class Account {
     							Model model,
     							BindingResult result) {
 
-    	Tenant tenant = (Tenant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    	Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
   		
 		editTenantForm.setEmail(tenant.getEmail()); 	
     	editValidator.validate(editTenantForm, result);
     	
     	if (result.hasErrors()) {
-    		return "edit";
+    		
+    		model.addAttribute("changePasswordForm", new PasswordForm());
+    		return "account/edit";
     	}
     	
 		tenant.setCompanyName(editTenantForm.getCompanyName());
-		tenant.setSubdomain(editTenantForm.getSubdomain()); 	
     	tenantService.save(tenant);
     	
     	return "redirect:overview";
     }
     
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/savepassword", method = RequestMethod.POST)
     public String savePassword( @ModelAttribute("changePasswordForm") PasswordForm changePasswordForm,
 									Model model,
 									BindingResult result) {
     	   	
+    	Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
+    	
     	PasswordFormValidator validator = new PasswordFormValidator();
     	validator.validate(changePasswordForm, result); 
     	   	
     	if (result.hasErrors()) {
+    		
+        	EditTenantForm editTenantForm = new EditTenantForm();
+        	editTenantForm.setCompanyName(tenant.getCompanyName());
+        	
+    		model.addAttribute("editTenantForm", editTenantForm);    		
+    		
     		return "account/edit";
     	}
-    	
-    	Tenant tenant = (Tenant) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    	tenant.setPassword(changePasswordForm.getPassword());
+
+    	tenant.setPassword(passwordEncoder.encodePassword(changePasswordForm.getPassword(), null));
     	tenantService.save(tenant);
+    	
     	return "redirect:overview";    	
     }
     

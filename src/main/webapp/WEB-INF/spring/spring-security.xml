@@ -27,6 +27,7 @@
 				logout-success-url="/auth/login" 
 				logout-url="/auth/logout"/>
 	
+		<remember-me user-service-ref="userDetailsService" />
 	</security:http>
  
 <!-- Declare an authentication-manager to use a custom userDetailsService -->

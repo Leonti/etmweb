@@ -13,11 +13,10 @@
     <div class="container">
 
 	    <div class="row">
-		    <div class="span4 offset4">
+		    <div class="span4 offset2">
 				<form:form modelAttribute="editTenantForm" method="POST" class="well">
 				
 					<bootstrap:input path="companyName" labelMessage="register.companyName" />
-					<bootstrap:input path="subdomain" labelMessage="register.subdomain" />
 					
 					<div class="form-actions">
 						<spring:message code="edit.submit" var="submit" /> 
@@ -25,12 +24,9 @@
 					</div>		
 				</form:form>	        
 		    </div>
-	    </div>
-
-	    <div class="row">
-
-		    <div class="span4 offset4">
-				<form:form modelAttribute="changePasswordForm" method="POST" class="well">
+		    
+		    <div class="span4">
+				<form:form modelAttribute="changePasswordForm" method="POST" action="savepassword" class="well">
 				
 					<bootstrap:input path="password" labelMessage="register.password" type="password" />
 					<bootstrap:input path="repeatPassword" labelMessage="register.repeatPassword" type="password" />
@@ -40,7 +36,7 @@
 						<input type="submit" value="${submit}" class="btn btn-primary btn-large" />
 					</div>		
 				</form:form>	        
-		    </div>
+		    </div>		    
 	    </div>
 
     </div> <!-- /container -->

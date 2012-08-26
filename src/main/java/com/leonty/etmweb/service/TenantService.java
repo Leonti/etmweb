@@ -23,16 +23,6 @@ public class TenantService {
 	}
 
     @Transactional
-	public Tenant getBySubdomain(String subdomain) {
-    	
-    	return (Tenant) sessionFactory.getCurrentSession()
-    			.createQuery("FROM Tenant t WHERE t.subdomain = ? AND t.deleted != 1")
-    			.setString(0, subdomain)
-    			.setMaxResults(1)
-    			.uniqueResult();
-	}
-
-    @Transactional
 	public Tenant getByEmail(String email) {
 
     	return (Tenant) sessionFactory.getCurrentSession()
