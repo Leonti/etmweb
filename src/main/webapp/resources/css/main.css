@@ -1,0 +1,77 @@
+
+.timeTable .day,
+.timeTableHeader {
+	border-top: 1px solid rgb(221, 221, 221);
+	overflow: hidden;
+}
+
+.day .workEntry {
+	overflow: hidden;	
+}
+
+.timeTable .weekSummary {
+	border-top: 3px solid rgb(221, 221, 221);
+	overflow: hidden;
+	padding: 1em 0;
+}
+
+.timeTable .day:nth-child(2n+1) {
+	background-color: rgb(249, 249, 249);
+}
+
+.day .date {
+	display: inline-block;
+	margin-bottom: 0.3em;
+}
+
+.day .jobTitle,
+.day .time,
+.day .totalTime,
+.timeTableHeader .span2 {
+	display: inline-block;
+	text-align: center;
+}
+
+.timeTableHeader {
+	font-weight: bold;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.day .daySummary {
+	border-top: 1px dashed rgb(221, 221, 221);
+	overflow: hidden;
+	margin-top: 0.3em;	
+}
+
+.day .dayOvertime,
+.week .weekOvertime {
+	float: right;
+}
+
+.dayOvertime .regular,
+.weekOvertime .regular, 
+.dayOvertime .extra,
+.weekOvertime .span2 {
+	display: inline-block;
+	text-align: center;
+}
+
+
+.timeTable .totals {
+	border-top: 6px solid rgb(221, 221, 221);
+	overflow: hidden;
+	padding: 1em 0;	
+}
+
+.totals .totalNumbers {
+	float: right;
+}
+
+.totals .value {
+	float: right;
+}
+
+.totals .total .value {
+	font-weight: bold;
+}

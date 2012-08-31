@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.calculation.TimeEntry;
 import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Time;

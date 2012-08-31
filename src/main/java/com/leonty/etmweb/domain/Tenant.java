@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,6 +28,9 @@ public class Tenant {
 	@Column(name="confirmationKey")
 	private String confirmationKey = null;
 	
+	@OneToOne
+	private OvertimeSettings overtimeSettings;
+
 	private Boolean deleted = false;
 	
 	private Integer role = 2;
@@ -97,6 +101,18 @@ public class Tenant {
 		this.password = password;
 	}
 
+	public OvertimeSettings getOvertimeSettings() {
+		
+		if (overtimeSettings == null)
+			 return new OvertimeSettings();
+		
+		return overtimeSettings;
+	}
+
+	public void setOvertimeSettings(OvertimeSettings overtimeSettings) {
+		this.overtimeSettings = overtimeSettings;
+	}	
+	
 	public Integer getId() {
 		return id;
 	}	

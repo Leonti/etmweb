@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.calculation.TimeEntry;
 
 @Entity
 @Table(name="Time")
@@ -109,5 +109,10 @@ public class Time implements TimeEntry {
 	@Override
 	public BigDecimal getWage() {
 		return new BigDecimal(job.getWage());
+	}
+
+	@Override
+	public String getJobTitle() {
+		return job.getTitle();
 	}
 }

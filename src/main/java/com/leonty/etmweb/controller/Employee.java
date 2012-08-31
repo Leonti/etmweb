@@ -2,6 +2,7 @@ package com.leonty.etmweb.controller;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,6 +27,8 @@ import com.leonty.etmweb.validator.EmployeeFormValidator;
 @RequestMapping("/employee")
 public class Employee {
 
+	static final Logger logger = Logger.getLogger(Employee.class);
+	
 	@Resource(name="employeeService")
 	EmployeeService employeeService;	
 

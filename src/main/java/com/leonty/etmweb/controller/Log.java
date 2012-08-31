@@ -1,6 +1,6 @@
 package com.leonty.etmweb.controller;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import javax.annotation.Resource;
 
@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.leonty.calculation.TimeEntriesParser;
-import com.leonty.calculation.TimeEntry;
-import com.leonty.etm.time.WorkWeek;
+import com.leonty.etm.calculation.DayLimits;
+import com.leonty.etm.calculation.TimeEntriesParser;
+import com.leonty.etm.calculation.WeekLimits;
+import com.leonty.etm.time.WorkWeeks;
 import com.leonty.etmweb.domain.AuthenticatedUser;
+import com.leonty.etmweb.domain.OvertimeSettings;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.LogParametersForm;
 import com.leonty.etmweb.service.EmployeeService;
@@ -72,16 +74,29 @@ public class Log {
 		com.leonty.etmweb.domain.Employee employee = employeeService.getById(logParametersForm.getEmployeeId(), tenant.getId());
 		model.addAttribute("employee", employee);
 		
-		List<TimeEntry> timeList = timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId());
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), 
+				timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId()));
 		
-		List<WorkWeek> workWeeks = TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), timeList);
+		OvertimeSettings overtimeSettings = tenant.getOvertimeSettings();
+		DayLimits dayLimits = new DayLimits(overtimeSettings.getDayRegularOvertimeLimitInSeconds(), overtimeSettings.getDayExtraOvertimeLimitInSeconds());
+		WeekLimits weekLimits = new WeekLimits(overtimeSettings.getWeekOvertimeLimitInSeconds(), overtimeSettings.getConsecutiveDaysLimit());	
+		
+		workWeeks = com.leonty.etm.calculation.Overtime.calcualateWeeks(TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), 
+				timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId())), 
+			weekLimits, 
+			dayLimits);
+		
 		model.addAttribute("weekList", workWeeks);
 		
-		model.addAttribute("timeList", timeList);
-		
-		System.out.println("COUNT: " + timeList.size());
+		model.addAttribute("regularPayment", workWeeks.getRegularPayment());
+		model.addAttribute("overtimePayment", workWeeks.getRegularOvertimePayment(new BigDecimal(overtimeSettings.getRegularOvertimeMultiplier())));
+		model.addAttribute("extraOvertimePayment", workWeeks.getExtraOvertimePayment(new BigDecimal(overtimeSettings.getExtraOvertimeMultiplier())));
+		model.addAttribute("totalPayment", workWeeks.getTotalPayment(
+				new BigDecimal(overtimeSettings.getRegularOvertimeMultiplier()),
+				new BigDecimal(overtimeSettings.getExtraOvertimeMultiplier())));
 		
 		return "log/index";
 	}
+
 	
 }

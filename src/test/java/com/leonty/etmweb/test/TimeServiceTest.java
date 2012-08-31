@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.calculation.TimeEntry;
 import com.leonty.etmweb.domain.Employee;
 import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Time;
