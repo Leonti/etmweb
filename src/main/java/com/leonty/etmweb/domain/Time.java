@@ -68,22 +68,6 @@ public class Time implements TimeEntry {
 		this.job = job;
 	}
 
-	public Date getInTime() {
-		return timeIn;
-	}
-
-	public void setInTime(Date inTime) {
-		this.timeIn = inTime;
-	}
-
-	public Date getOutTime() {
-		return timeOut;
-	}
-
-	public void setOutTime(Date outTime) {
-		this.timeOut = outTime;
-	}
-
 	public Integer getTenantId() {
 		return tenantId;
 	}

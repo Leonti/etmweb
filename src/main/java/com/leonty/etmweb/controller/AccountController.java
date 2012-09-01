@@ -41,7 +41,7 @@ import com.leonty.etmweb.validator.TenantFormValidator;
 
 @Controller
 @RequestMapping("/account")
-public class Account {
+public class AccountController {
 
 	@Resource(name="tenantService")
 	TenantService tenantService;

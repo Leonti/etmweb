@@ -9,8 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="OvertimeSettings")
-public class OvertimeSettings {
+@Table(name="Settings")
+public class Settings {
 
     @Id
     @GeneratedValue		
@@ -25,15 +25,15 @@ public class OvertimeSettings {
 	private Double regularOvertimeMultiplier;
 	private Double extraOvertimeMultiplier;
 
-	@Column(name="tenantId")
-	private Integer tenantId;
+	private String timeZone;
 
+	@Column(name="tenantId")
+	private Integer tenantId;	
 	
-	
-	public OvertimeSettings(Double dayRegularOvertimeLimit,
+	public Settings(Double dayRegularOvertimeLimit,
 			Double dayExtraOvertimeLimit, int consecutiveDaysLimit,
 			Double weekOvertimeLimit, Double regularOvertimeMultiplier,
-			Double extraOvertimeMultiplier, Integer tenantId) {
+			Double extraOvertimeMultiplier, String timeZone) {
 		super();
 		this.dayRegularOvertimeLimit = dayRegularOvertimeLimit;
 		this.dayExtraOvertimeLimit = dayExtraOvertimeLimit;
@@ -41,10 +41,18 @@ public class OvertimeSettings {
 		this.weekOvertimeLimit = weekOvertimeLimit;
 		this.regularOvertimeMultiplier = regularOvertimeMultiplier;
 		this.extraOvertimeMultiplier = extraOvertimeMultiplier;
-		this.tenantId = tenantId;
+		this.timeZone = timeZone;
 	}
 
-	public OvertimeSettings() {}
+	public Settings() {
+		
+		this.dayRegularOvertimeLimit = 8d;
+		this.dayExtraOvertimeLimit = 12d;
+		this.consecutiveDaysLimit = 7;
+		this.weekOvertimeLimit = 40d;
+		this.regularOvertimeMultiplier = 1.5;
+		this.extraOvertimeMultiplier = 2d;		
+	}
 
 	public Double getDayRegularOvertimeLimit() {
 		return dayRegularOvertimeLimit;
@@ -114,6 +122,14 @@ public class OvertimeSettings {
 		this.tenantId = tenantId;
 	}
 
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}	
+	
 	public Integer getId() {
 		return id;
 	}

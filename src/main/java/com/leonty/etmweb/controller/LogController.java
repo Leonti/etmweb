@@ -20,7 +20,7 @@ import com.leonty.etm.calculation.TimeEntriesParser;
 import com.leonty.etm.calculation.WeekLimits;
 import com.leonty.etm.time.WorkWeeks;
 import com.leonty.etmweb.domain.AuthenticatedUser;
-import com.leonty.etmweb.domain.OvertimeSettings;
+import com.leonty.etmweb.domain.Settings;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.LogParametersForm;
 import com.leonty.etmweb.service.EmployeeService;
@@ -29,7 +29,7 @@ import com.leonty.etmweb.service.TimeService;
 @Controller
 @Secured("ROLE_USER")
 @RequestMapping("/log")
-public class Log {
+public class LogController {
 
 	@Resource(name="employeeService")
 	EmployeeService employeeService;		
@@ -77,7 +77,7 @@ public class Log {
 		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), 
 				timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId()));
 		
-		OvertimeSettings overtimeSettings = tenant.getOvertimeSettings();
+		Settings overtimeSettings = tenant.getSettings();
 		DayLimits dayLimits = new DayLimits(overtimeSettings.getDayRegularOvertimeLimitInSeconds(), overtimeSettings.getDayExtraOvertimeLimitInSeconds());
 		WeekLimits weekLimits = new WeekLimits(overtimeSettings.getWeekOvertimeLimitInSeconds(), overtimeSettings.getConsecutiveDaysLimit());	
 		

@@ -22,7 +22,7 @@ import com.leonty.etmweb.validator.JobFormValidator;
 @Controller
 @Secured("ROLE_USER")
 @RequestMapping("/job")
-public class Job {
+public class JobController {
 
 	@Resource(name="jobService")
 	JobService jobService;	

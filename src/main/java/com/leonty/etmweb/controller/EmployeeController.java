@@ -25,9 +25,9 @@ import com.leonty.etmweb.validator.EmployeeFormValidator;
 @Controller
 @Secured("ROLE_USER")
 @RequestMapping("/employee")
-public class Employee {
+public class EmployeeController {
 
-	static final Logger logger = Logger.getLogger(Employee.class);
+	static final Logger logger = Logger.getLogger(EmployeeController.class);
 	
 	@Resource(name="employeeService")
 	EmployeeService employeeService;	

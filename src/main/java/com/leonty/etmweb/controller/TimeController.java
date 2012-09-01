@@ -26,7 +26,7 @@ import com.leonty.etmweb.validator.EmployeeLoginFormValidator;
 @Controller
 @Secured("ROLE_SERVICE")
 @RequestMapping("/time")
-public class Time {
+public class TimeController {
 
 	@Autowired
 	EmployeeLoginFormValidator employeeLoginFormValidator;	

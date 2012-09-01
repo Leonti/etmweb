@@ -5,14 +5,14 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.leonty.etmweb.form.OvertimeSettingsForm;
+import com.leonty.etmweb.form.SettingsForm;
 
 @Component
-public class OvertimeSettingsFormValidator implements Validator {
+public class SettingsFormValidator implements Validator {
 
 	@Override
 	public boolean supports(@SuppressWarnings("rawtypes") Class clazz) {
-		return OvertimeSettingsForm.class.equals(clazz);
+		return SettingsForm.class.equals(clazz);
 	}	
 
 	@Override
@@ -31,7 +31,7 @@ public class OvertimeSettingsFormValidator implements Validator {
 			ValidationUtils.rejectIfEmptyOrWhitespace(errors, field, "field.required");			
 		}
 		
-		OvertimeSettingsForm overtimeSettingsForm = (OvertimeSettingsForm) obj;
+		SettingsForm overtimeSettingsForm = (SettingsForm) obj;
 		
 		if (!overtimeSettingsForm.getDayRegularOvertimeLimit().matches("-?\\d+(\\.\\d+)?")) {
 			errors.rejectValue("dayRegularOvertimeLimit", "field.notnumeric");

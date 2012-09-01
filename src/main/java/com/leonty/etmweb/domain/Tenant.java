@@ -29,7 +29,7 @@ public class Tenant {
 	private String confirmationKey = null;
 	
 	@OneToOne
-	private OvertimeSettings overtimeSettings;
+	private Settings settings;
 
 	private Boolean deleted = false;
 	
@@ -101,16 +101,16 @@ public class Tenant {
 		this.password = password;
 	}
 
-	public OvertimeSettings getOvertimeSettings() {
+	public Settings getSettings() {
 		
-		if (overtimeSettings == null)
-			 return new OvertimeSettings();
+		if (settings == null)
+			 return new Settings();
 		
-		return overtimeSettings;
+		return settings;
 	}
 
-	public void setOvertimeSettings(OvertimeSettings overtimeSettings) {
-		this.overtimeSettings = overtimeSettings;
+	public void setSettings(Settings settings) {
+		this.settings = settings;
 	}	
 	
 	public Integer getId() {

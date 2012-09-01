@@ -1,8 +1,8 @@
 package com.leonty.etmweb.form;
 
-import com.leonty.etmweb.domain.OvertimeSettings;
+import com.leonty.etmweb.domain.Settings;
 
-public class OvertimeSettingsForm {
+public class SettingsForm {
 
 	private String dayRegularOvertimeLimit;
 	private String dayExtraOvertimeLimit;
@@ -13,20 +13,20 @@ public class OvertimeSettingsForm {
 	private String regularOvertimeMultiplier;
 	private String extraOvertimeMultiplier;
 	
+	private String timeZone;
 	
-	public OvertimeSettingsForm() {}
+	public SettingsForm() {}
 	
-	public OvertimeSettingsForm(OvertimeSettings overtimeSettings) {
-		this.dayRegularOvertimeLimit = overtimeSettings.getDayRegularOvertimeLimit().toString();
-		this.dayExtraOvertimeLimit = overtimeSettings.getDayExtraOvertimeLimit().toString();
-		this.consecutiveDaysLimit = overtimeSettings.getConsecutiveDaysLimit().toString();
-		this.weekOvertimeLimit = overtimeSettings.getWeekOvertimeLimit().toString();
-		this.regularOvertimeMultiplier = overtimeSettings.getRegularOvertimeMultiplier().toString();
-		this.extraOvertimeMultiplier = overtimeSettings.getExtraOvertimeMultiplier().toString();		
+	public SettingsForm(Settings settings) {
+		this.dayRegularOvertimeLimit = settings.getDayRegularOvertimeLimit().toString();
+		this.dayExtraOvertimeLimit = settings.getDayExtraOvertimeLimit().toString();
+		this.consecutiveDaysLimit = settings.getConsecutiveDaysLimit().toString();
+		this.weekOvertimeLimit = settings.getWeekOvertimeLimit().toString();
+		this.regularOvertimeMultiplier = settings.getRegularOvertimeMultiplier().toString();
+		this.extraOvertimeMultiplier = settings.getExtraOvertimeMultiplier().toString();
+		this.timeZone = settings.getTimeZone();
 	}
-	
-
-	
+		
 	public String getDayRegularOvertimeLimit() {
 		return dayRegularOvertimeLimit;
 	}
@@ -75,11 +75,24 @@ public class OvertimeSettingsForm {
 		this.extraOvertimeMultiplier = extraOvertimeMultiplier;
 	}
 
-	public OvertimeSettings getOvertimeSettings(Integer tenantId) {	
+	public String getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
+	}
+
+	public Settings getSettings(Settings settings) {	
+
+		settings.setDayRegularOvertimeLimit(Double.valueOf(getDayRegularOvertimeLimit()));
+		settings.setDayExtraOvertimeLimit(Double.valueOf(getDayExtraOvertimeLimit()));
+		settings.setConsecutiveDaysLimit(Integer.valueOf(getConsecutiveDaysLimit()));
+		settings.setWeekOvertimeLimit(Double.valueOf(getWeekOvertimeLimit()));
+		settings.setRegularOvertimeMultiplier(Double.valueOf(getRegularOvertimeMultiplier()));
+		settings.setExtraOvertimeMultiplier(Double.valueOf(getExtraOvertimeMultiplier()));
+		settings.setTimeZone(getTimeZone());
 		
-		return new OvertimeSettings(Double.valueOf(getDayRegularOvertimeLimit()), 
-				Double.valueOf(getDayExtraOvertimeLimit()), Integer.valueOf(getConsecutiveDaysLimit()), 
-				Double.valueOf(getWeekOvertimeLimit()), Double.valueOf(getRegularOvertimeMultiplier()),
-				Double.valueOf(getExtraOvertimeMultiplier()), tenantId);
+		return settings;
 	}
 }

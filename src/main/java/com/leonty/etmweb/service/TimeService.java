@@ -41,7 +41,7 @@ public class TimeService {
 		// Employee is currently "punched in" in some job -punch him out
 		if (times.size() > 0) {
 			Time timeAlreadyIn = times.get(0);
-			timeAlreadyIn.setOutTime(timeIn);
+			timeAlreadyIn.setTimeOut(timeIn);
 		}		
 		
 		Time time = new Time(employee, job, timeIn, tenantId);
@@ -62,7 +62,7 @@ public class TimeService {
 				.uniqueResult();
 				
 				// update it's time out to given time
-				time.setOutTime(timeOut);
+				time.setTimeOut(timeOut);
 				save(time);		
 		}
 	}

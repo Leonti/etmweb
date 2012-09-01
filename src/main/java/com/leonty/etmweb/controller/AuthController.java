@@ -23,7 +23,7 @@ import com.leonty.etmweb.domain.AuthenticatedUser;
 
 @Controller
 @RequestMapping("/auth")
-public class Auth {
+public class AuthController {
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getLoginPage(@RequestParam(value="error", required=false) boolean error,

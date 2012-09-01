@@ -1,7 +1,10 @@
 package com.leonty.etmweb.controller;
 
+import java.util.ArrayList;
+
 import javax.annotation.Resource;
 
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.leonty.etmweb.domain.AuthenticatedUser;
-import com.leonty.etmweb.domain.OvertimeSettings;
+import com.leonty.etmweb.domain.Settings;
 import com.leonty.etmweb.domain.Tenant;
-import com.leonty.etmweb.form.OvertimeSettingsForm;
+import com.leonty.etmweb.form.SettingsForm;
 import com.leonty.etmweb.service.SettingsService;
 import com.leonty.etmweb.service.TenantService;
-import com.leonty.etmweb.validator.OvertimeSettingsFormValidator;
+import com.leonty.etmweb.validator.SettingsFormValidator;
 
 @Controller
 @Secured("ROLE_USER")
 @RequestMapping("/settings")
-public class Settings {
+public class SettingsController {
 
 	@Resource(name="settingsService")
 	SettingsService settingsService;	
@@ -32,39 +35,37 @@ public class Settings {
 	TenantService tenantService;		
 	
 	@Autowired
-	OvertimeSettingsFormValidator overtimeSettingsFormValidator;	
+	SettingsFormValidator overtimeSettingsFormValidator;	
 	
-	@RequestMapping(value = "/overtime", method = RequestMethod.GET)
+	@RequestMapping(value = "/overview", method = RequestMethod.GET)
 	public String index(Model model) {
 		
 		Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
 		
-		model.addAttribute("overtimeSettingsForm", new OvertimeSettingsForm(tenant.getOvertimeSettings()));
+		model.addAttribute("timeZones", DateTimeZone.getAvailableIDs());
+		model.addAttribute("settingsForm", new SettingsForm(tenant.getSettings()));
 		
-		return "settings/overtime";
+		return "settings";
 	}	
 
-	@RequestMapping(value = "/overtime", method = RequestMethod.POST)
-	public String indexPost(@ModelAttribute("overtimeSettingsForm") OvertimeSettingsForm overtimeSettingsForm, 
+	@RequestMapping(value = "/overview", method = RequestMethod.POST)
+	public String indexPost(@ModelAttribute("settingsForm") SettingsForm settingsForm, 
 			Model model,
 			BindingResult result) {
 
-		overtimeSettingsFormValidator.validate(overtimeSettingsForm, result); 
+		overtimeSettingsFormValidator.validate(settingsForm, result); 
         if (result.hasErrors()) { 
-        	return "settings/overtime";
+        	return "settings";
         } 		
 		
 		Tenant tenant = ((AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getTenant();
 		
-		OvertimeSettings overtimeSettings = overtimeSettingsForm.getOvertimeSettings(tenant.getId());	
-		settingsService.save(overtimeSettings);
-		
-		tenant.setOvertimeSettings(overtimeSettings);		
+		Settings settings = settingsForm.getSettings(tenant.getSettings());	
+		settingsService.save(settings);		
+		tenant.setSettings(settings);		
 		tenantService.save(tenant);
 		
-		model.addAttribute("overtimeSettingsForm", overtimeSettingsForm);
-		
-		return "redirect:overtime";
+		return "redirect:overview";
 	}	
 	
 }

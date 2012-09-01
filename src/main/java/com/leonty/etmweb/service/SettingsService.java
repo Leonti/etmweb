@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.leonty.etmweb.domain.OvertimeSettings;
+import com.leonty.etmweb.domain.Settings;
 
 @Service("settingsService")
 @Transactional
@@ -14,14 +14,14 @@ public class SettingsService {
     @Autowired
     private SessionFactory sessionFactory;
     
-	public void save(OvertimeSettings overtimeSettings) {
-		sessionFactory.getCurrentSession().saveOrUpdate(overtimeSettings);
+	public void save(Settings settings) {
+		sessionFactory.getCurrentSession().saveOrUpdate(settings);
 	}
 	
-	public OvertimeSettings getOvertimeSettingsById(Integer id, Integer tenantId) {
+	public Settings getSettingsById(Integer id, Integer tenantId) {
 
-    	return (OvertimeSettings) sessionFactory.getCurrentSession()
-    			.createQuery("FROM OvertimeSettings os WHERE os.id = ? AND os.tenantId = ?")
+    	return (Settings) sessionFactory.getCurrentSession()
+    			.createQuery("FROM Settings os WHERE os.id = ? AND os.tenantId = ?")
     			.setLong(0, id)
     			.setLong(1, tenantId)
     			.setMaxResults(1)
