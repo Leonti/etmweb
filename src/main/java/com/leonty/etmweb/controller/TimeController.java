@@ -1,9 +1,9 @@
 package com.leonty.etmweb.controller;
 
-import java.util.Date;
-
 import javax.annotation.Resource;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.leonty.etmweb.domain.AuthenticatedUser;
+import com.leonty.etmweb.domain.Employee;
+import com.leonty.etmweb.domain.Job;
 import com.leonty.etmweb.domain.Tenant;
 import com.leonty.etmweb.form.EmployeeLoginForm;
 import com.leonty.etmweb.form.JobSelectForm;
@@ -65,13 +67,16 @@ public class TimeController {
 		
         model.addAttribute("jobSelectForm", new JobSelectForm());
         
-        com.leonty.etmweb.domain.Employee employee = employeeService.getByCode(employeeLoginForm.getCode(), tenant.getId());
+        Employee employee = employeeService.getByCode(employeeLoginForm.getCode(), tenant.getId());
 		
         model.addAttribute("employee", employee);
         
         model.addAttribute("employeeJobs", employee.getJobs());
         
-        com.leonty.etmweb.domain.Job currentJob = timeService.getJobAtTime(employee, new Date(), tenant.getId());
+        Job currentJob = timeService.getJobAtTime(
+        		employee, 
+        		new DateTime(DateTimeZone.forID(tenant.getSettings().getTimeZone())), 
+        		tenant.getId());
         model.addAttribute("currentJob", currentJob);
         model.addAttribute("isWorking", currentJob != null ? true : false);
         
@@ -86,16 +91,17 @@ public class TimeController {
 		AuthenticatedUser authUser = (AuthenticatedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Tenant tenant = authUser.getTenant();
 		
-		com.leonty.etmweb.domain.Employee employee = employeeService.getByCode(jobSelectForm.getCode(), tenant.getId());
+		Employee employee = employeeService.getByCode(jobSelectForm.getCode(), tenant.getId());
 		
-		com.leonty.etmweb.domain.Job job = null;
+		Job job = null;
+		DateTime date = new DateTime(DateTimeZone.forID(tenant.getSettings().getTimeZone()));
 		if (jobSelectForm.getJobId() != 0) {
 			
 			job = jobService.getById(jobSelectForm.getJobId(), tenant.getId());		
-			timeService.signInEmployee(employee, job, new Date(), tenant.getId());
+			timeService.signInEmployee(employee, job, date, tenant.getId());
 		} else {
 
-			timeService.signOutEmployee(employee, new Date(), tenant.getId());
+			timeService.signOutEmployee(employee, date, tenant.getId());
 		}
 
         model.addAttribute("employee", employee);

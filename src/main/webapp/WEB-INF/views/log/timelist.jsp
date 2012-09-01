@@ -22,11 +22,11 @@
 	
 			<c:forEach var="workDay" items="${workWeek.days}">
 			<div class="day">
-				<span class="date label"><fmt:formatDate pattern="MM/dd/yyyy" value="${workDay.dayStart}" /></span>
+				<span class="date label"><fmt:formatDate pattern="MM/dd/yyyy" value="${workDay.dayStart}" timeZone="${timeZone}"/></span>
 				<c:forEach var="workEntry" items="${workDay.entries}">
 				<div class="workEntry">
-					<span class="time span2"><fmt:formatDate pattern="hh:mm:ss a" value="${workEntry.timeIn}" /></span>
-					<span class="time span2"><fmt:formatDate pattern="hh:mm:ss a" value="${workEntry.timeOut}" /></span>
+					<span class="time span2"><fmt:formatDate pattern="hh:mm:ss a" value="${workEntry.timeIn}" timeZone="${timeZone}" /></span>
+					<span class="time span2"><fmt:formatDate pattern="hh:mm:ss a" value="${workEntry.timeOut}" timeZone="${timeZone}" /></span>
 					<span class="jobTitle span2">${workEntry.jobTitle} (${workEntry.wage})</span>
 					<span class="totalTime span2"><fmt:formatNumber type="number" maxFractionDigits="2" value="${workEntry.totalTimeSpanInHours}" /></span>			
 				</div>	

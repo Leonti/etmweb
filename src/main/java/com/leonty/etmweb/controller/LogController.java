@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import javax.annotation.Resource;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.security.access.annotation.Secured;
@@ -37,7 +38,6 @@ public class LogController {
 	@Resource(name="timeService")
 	TimeService timeService;	
 	
-	private DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String index(Model model) {
@@ -48,14 +48,15 @@ public class LogController {
 		
 		model.addAttribute("logParametersForm", new LogParametersForm());
 		
-		DateTime endDate = new DateTime();
+		DateTime endDate = new DateTime().withZone(DateTimeZone.forID(tenant.getSettings().getTimeZone()));		
 		
-		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy");
 		String defaultEndDate = formatter.print(endDate);
 		String defaultStartDate = formatter.print(endDate.minusWeeks(2));
 				
 		model.addAttribute("defaultStartDate", defaultStartDate);
 		model.addAttribute("defaultEndDate", defaultEndDate);
+		model.addAttribute("timeZone", tenant.getSettings().getTimeZone());
 		
 		return "log/index";
 	}
@@ -68,21 +69,22 @@ public class LogController {
 		
 		model.addAttribute("employeeList", employeeService.getList(tenant.getId()));
 		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy").withZone(DateTimeZone.forID(tenant.getSettings().getTimeZone()));
 		DateTime startDate = formatter.parseDateTime(logParametersForm.getStartDate());
 		DateTime endDate = formatter.parseDateTime(logParametersForm.getEndDate());
 		
 		com.leonty.etmweb.domain.Employee employee = employeeService.getById(logParametersForm.getEmployeeId(), tenant.getId());
 		model.addAttribute("employee", employee);
 		
-		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), 
-				timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId()));
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(startDate, endDate, 
+				timeService.getTimeForEmployee(employee, startDate, endDate, tenant.getId()));
 		
 		Settings overtimeSettings = tenant.getSettings();
 		DayLimits dayLimits = new DayLimits(overtimeSettings.getDayRegularOvertimeLimitInSeconds(), overtimeSettings.getDayExtraOvertimeLimitInSeconds());
 		WeekLimits weekLimits = new WeekLimits(overtimeSettings.getWeekOvertimeLimitInSeconds(), overtimeSettings.getConsecutiveDaysLimit());	
 		
-		workWeeks = com.leonty.etm.calculation.Overtime.calcualateWeeks(TimeEntriesParser.getWorkWeeks(startDate.toDate(), endDate.toDate(), 
-				timeService.getTimeForEmployee(employee, startDate.toDate(), endDate.toDate(), tenant.getId())), 
+		workWeeks = com.leonty.etm.calculation.Overtime.calcualateWeeks(TimeEntriesParser.getWorkWeeks(startDate, endDate, 
+				timeService.getTimeForEmployee(employee, startDate, endDate, tenant.getId())), 
 			weekLimits, 
 			dayLimits);
 		
@@ -94,6 +96,8 @@ public class LogController {
 		model.addAttribute("totalPayment", workWeeks.getTotalPayment(
 				new BigDecimal(overtimeSettings.getRegularOvertimeMultiplier()),
 				new BigDecimal(overtimeSettings.getExtraOvertimeMultiplier())));
+		
+		model.addAttribute("timeZone", tenant.getSettings().getTimeZone());
 		
 		return "log/index";
 	}

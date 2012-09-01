@@ -1,10 +1,11 @@
 package com.leonty.etmweb.service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.SessionFactory;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class TimeService {
 	}
     
 	@SuppressWarnings("unchecked")	
-	public void signInEmployee(Employee employee, Job job, Date timeIn, Integer tenantId) {
+	public void signInEmployee(Employee employee, Job job, DateTime timeIn, Integer tenantId) {
 
 		ArrayList<Time> times = new ArrayList<Time>(sessionFactory.getCurrentSession().createQuery(
 		"FROM Time AS time WHERE " +
@@ -48,7 +49,7 @@ public class TimeService {
 		save(time);	
 	}
 	
-	public void signOutEmployee(Employee employee, Date timeOut, Integer tenantId) {
+	public void signOutEmployee(Employee employee, DateTime timeOut, Integer tenantId) {
 		
 		// only proceed if employee is currently working
 		if (getJobAtTime(employee, timeOut, tenantId) != null) {
@@ -64,11 +65,11 @@ public class TimeService {
 				// update it's time out to given time
 				time.setTimeOut(timeOut);
 				save(time);		
-		}
+		} 
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<TimeEntry> getTimeForEmployee(Employee employee, Date start, Date end, Integer tenantId) {
+	public List<TimeEntry> getTimeForEmployee(Employee employee, DateTime start, DateTime end, Integer tenantId) {
 		
 		// Select time entries which started after (or at the same time as new period)
 		// or those that started before but still going on
@@ -80,22 +81,26 @@ public class TimeService {
 				"AND time.tenantId = ?" +
 				"ORDER BY time.timeIn ASC")
 				.setParameter(0, employee)
-				.setParameter(1, start)
-				.setParameter(2, start)
-				.setParameter(3, start)
-				.setParameter(4, end)
+				.setParameter(1, start.withZone(DateTimeZone.UTC).toLocalDateTime())
+				.setParameter(2, start.withZone(DateTimeZone.UTC).toLocalDateTime())
+				.setParameter(3, start.withZone(DateTimeZone.UTC).toLocalDateTime())
+				.setParameter(4, end.withZone(DateTimeZone.UTC).toLocalDateTime())
 				.setParameter(5, tenantId)
 				.list());	
 	}	
 	
-	public Job getJobAtTime(Employee employee, Date pointInTime, Integer tenantId) {
+	public Job getJobAtTime(Employee employee, DateTime pointInTime, Integer tenantId) {
+		
+		// search criteria
+		// timeIn should be less or equals time we are checking against - employee already working
+		// timeOut should be bigger (time to check should be inside timeIn-timeOut) yet or null - hasn't log out at all
 		
  		Time time = (Time) sessionFactory.getCurrentSession().createQuery(
 			"FROM Time AS time WHERE time.employee = :employee " +
-			"AND (time.timeOut = NULL OR time.timeOut < :pointInTime) AND time.timeIn >= :pointInTime " +
+			"AND (time.timeOut > :pointInTime OR time.timeOut = NULL) AND time.timeIn <= :pointInTime " +
 			"AND time.tenantId = :tenantId")
 			.setParameter("employee", employee)
-			.setDate("pointInTime", pointInTime)
+			.setParameter("pointInTime", pointInTime.withZone(DateTimeZone.UTC).toLocalDateTime())
 			.setInteger("tenantId", tenantId)
 			.setMaxResults(1)
 			.uniqueResult();

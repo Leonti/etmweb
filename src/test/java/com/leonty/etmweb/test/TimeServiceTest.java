@@ -1,13 +1,13 @@
 package com.leonty.etmweb.test;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -48,18 +48,12 @@ public class TimeServiceTest {
     private SessionFactory sessionFactory;
 	
 	@Before
-	public void setUp() {
-		
-	}
-	
-	@After
 	@Transactional
-	public void tearDown() {
-	//	sessionFactory.getCurrentSession().createQuery("DELETE FROM Time");
+	public void setUp() {
 		Session session = SessionFactoryUtils.openSession(sessionFactory);
 		session.createQuery("DELETE FROM Time").executeUpdate();
 		session.createQuery("DELETE FROM Employee").executeUpdate();
-		session.createQuery("DELETE FROM Job").executeUpdate();
+		session.createQuery("DELETE FROM Job").executeUpdate();		
 	}
 	
     @Test
@@ -73,10 +67,10 @@ public class TimeServiceTest {
     	job.setTenantId(1);
     	jobService.save(job);
     	
-    	Time time = new Time(employee, job, new Date(), 1);
+    	Time time = new Time(employee, job, new DateTime(), 1);   	
     	timeService.save(time);
     	
-    	Job currentJob = timeService.getJobAtTime(employee, new Date(), 1);
+    	Job currentJob = timeService.getJobAtTime(employee, new DateTime(), 1);
     	
     	Assert.assertNotNull("Job was not found", currentJob);
     	Assert.assertEquals("Job user logged in with is not the same as current", job, currentJob);
@@ -84,14 +78,9 @@ public class TimeServiceTest {
 	
     @Test
     public void testSignOut() {
-
-    	Calendar cal = Calendar.getInstance();
     	
-    	cal.set(2012, 8, 20, 8, 0);
-    	Date timeIn = cal.getTime();
-    	
-    	cal.set(2012, 8, 20, 17, 0);
-    	Date timeOut = cal.getTime();
+    	DateTime timeIn = new DateTime(2012, 8, 20, 8, 0);
+    	DateTime timeOut = new DateTime(2012, 8, 20, 17, 0);
   
     	Employee employee = new Employee("Leonty", "1234");
     	employee.setTenantId(1); 	
@@ -112,8 +101,7 @@ public class TimeServiceTest {
     	Assert.assertTrue("After signing out number of entries for employee is not 1", times.size() == 1);    	   
     	Assert.assertEquals("Date out is not the same as date used for signing out", timeOut, times.get(0).getTimeOut());
 
-    	cal.set(2012, 8, 20, 18, 0);
-    	Date timeAfterSignOut = cal.getTime();
+    	DateTime timeAfterSignOut = new DateTime(2012, 8, 20, 17, 10);
     	
     	Job nullJob = timeService.getJobAtTime(employee, timeAfterSignOut, 1);
     	

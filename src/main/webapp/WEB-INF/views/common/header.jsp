@@ -47,7 +47,7 @@
 	            <li><a href="/employee/list"><spring:message code="navigation.employees" /></a></li>
 	            <li><a href="/job/list"><spring:message code="navigation.jobs" /></a></li>
 	            <li><a href="/log/"><spring:message code="navigation.log" /></a></li>
-	            <li><a href="/settings/"><spring:message code="navigation.settings" /></a></li>
+	            <li><a href="/settings/overview"><spring:message code="navigation.settings" /></a></li>
 	            <li><a href="/auth/service"><spring:message code="navigation.serviceMode" /></a></li>	              
 			  </sec:authorize>
   			  <sec:authorize access="isAnonymous()">
