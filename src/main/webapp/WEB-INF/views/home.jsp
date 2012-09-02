@@ -15,7 +15,7 @@
 			<div class="span8">
 				<h1>Welcome to ETM</h1>
 				<p class="lead">
-					ETM is a web service for employers that tracks time employees spend on their tasks by providing easy to use time tracking interface.
+					Employee Time Management is a web service for employers that tracks time employees spend on their tasks by providing easy to use time tracking interface.
 				</p>
 				<h2>Who is it for?</h2>
 				<p>Organizations where job pays are hourly based such as hotels, restaurants, stores.</p>
