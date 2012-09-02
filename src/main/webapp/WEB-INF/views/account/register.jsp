@@ -14,8 +14,10 @@
 
 	    <div class="row">
 	    	<div class="span6">
-	  		   	<h1>Bootstrap starter template</h1>
-	  	    	<p>Use this document as a way to quick start any new project.<br> All you get is this message and a barebones HTML document.</p>	    	
+	  		   	<h1>Register new account</h1>
+	  	    	<p>The service is free to use.<br>
+	  	    		After creating an account you'll receive confirmation email with link to activate the service.
+	  	    	</p>  	
 	    	</div>
 
 		    <div class="span4">

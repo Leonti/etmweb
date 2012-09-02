@@ -51,7 +51,7 @@
 	            <li><a href="/auth/service"><spring:message code="navigation.serviceMode" /></a></li>	              
 			  </sec:authorize>
   			  <sec:authorize access="isAnonymous()">
-  			      <li><a href="/about">About</a></li>
+  			      <li><a href="/about">Installation and screenshots</a></li>
   			  </sec:authorize>	
 
             </ul>

@@ -11,7 +11,7 @@ public class GeneralController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String about_test(Model model) {
 		
-		return "about";
+		return "home";
 	}	
 	
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
